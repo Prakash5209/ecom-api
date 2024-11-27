@@ -11,13 +11,13 @@ from django.db.models import Prefetch
 #from store.serializers import ProductSerializer,ProductRetrieveSerializer
 #from store.models import Product,ProductImages
 from cart.models import CartItem
-from cart.serializers import CartItemSerializer,CartItemRetrieveSerializer
+from cart.serializers import CartItemSerializer,CartItemRetrieveSerializer,CartListSerializer
 #from store import serializers
 
 #exist_or_not = CartItem.objects.filter(user = self.request.user,product = serializer.validated_data['product'],quantity = serializer.validated_data['quantity'],color = serializer.validated_data['color'],size = serializer.validated_data['size']).exists()
 
 class CartListView(ListAPIView):
-    serializer_class = CartItemSerializer
+    serializer_class = CartListSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -75,7 +75,7 @@ class CartItemCreateView(CreateAPIView):
 
 
 class CartItemRUD(RetrieveUpdateDestroyAPIView):
-    serializer_class = CartItemSerializer
+    serializer_class = CartListSerializer
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, pk):
@@ -87,7 +87,6 @@ class CartItemRUD(RetrieveUpdateDestroyAPIView):
         serializer = self.serializer_class(cart_item, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            print('data saved',serializer.data)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

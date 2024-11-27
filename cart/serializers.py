@@ -4,7 +4,6 @@ from cart.models import CartItem
 from store.serializers import ProductModelSerializer
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product = ProductModelSerializer()
     class Meta:
         model = CartItem
         exclude = ('user',)
@@ -17,3 +16,12 @@ class CartItemRetrieveSerializer(serializers.ModelSerializer):
         model = CartItem
         exclude = ('user',)
         #fields = '__all__'
+
+# this serializer for cart list with all details 
+class CartListSerializer(serializers.ModelSerializer):
+    product = ProductModelSerializer()
+    class Meta:
+        model = CartItem
+        exclude = ('user',)
+        #fields = '__all__'
+
