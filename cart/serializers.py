@@ -1,11 +1,10 @@
 from rest_framework import serializers
 
 from cart.models import CartItem
-#from store.serializers import ProductSerializer
-#from store.serializers import ProductRetrieveSerializer
+from store.serializers import ProductModelSerializer
 
 class CartItemSerializer(serializers.ModelSerializer):
-    #product = ProductSerializer()
+    product = ProductModelSerializer()
     class Meta:
         model = CartItem
         exclude = ('user',)

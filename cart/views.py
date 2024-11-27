@@ -17,7 +17,7 @@ from cart.serializers import CartItemSerializer,CartItemRetrieveSerializer
 #exist_or_not = CartItem.objects.filter(user = self.request.user,product = serializer.validated_data['product'],quantity = serializer.validated_data['quantity'],color = serializer.validated_data['color'],size = serializer.validated_data['size']).exists()
 
 class CartListView(ListAPIView):
-    serializer_class = CartItemRetrieveSerializer
+    serializer_class = CartItemSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
