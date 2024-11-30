@@ -86,13 +86,14 @@ class CartItemCreateView(CreateAPIView):
 class CartItemRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = CartListSerializer
     permission_classes = [IsAuthenticated]
-    
+    def get_queryset(self):
+        return CartItem.objects.filter(user=self.request.user)
+
     def patch(self, request, pk):
         try:
             cart_item = CartItem.objects.get(id=pk, user=request.user)
         except CartItem.DoesNotExist:
             return Response({"status": "cart item not found"}, status=status.HTTP_404_NOT_FOUND)
-        
         serializer = self.serializer_class(cart_item, data=request.data, partial=True)
         if serializer.is_valid():
             try:
@@ -109,5 +110,3 @@ class CartItemRUD(RetrieveUpdateDestroyAPIView):
         else:
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        return CartItem.objects.filter(user=self.request.user)
