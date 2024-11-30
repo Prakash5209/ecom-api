@@ -37,7 +37,6 @@ class CartItemCreateView(CreateAPIView):
         pid = serializer.validated_data.get('product').id
         pstock = serializer.validated_data.get('product').stock
         cart_quantity = sum([i.quantity for i in CartItem.objects.filter(Q(product__id = pid) & Q(user = self.request.user))])
-        print(request.data)
 
         try:
             exist_or_not = CartItem.objects.get(user = self.request.user,product = serializer.validated_data['product'],color = serializer.validated_data['color'],size = serializer.validated_data['size'])
@@ -87,7 +86,7 @@ class CartItemCreateView(CreateAPIView):
 class CartItemRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = CartListSerializer
     permission_classes = [IsAuthenticated]
-
+    
     def patch(self, request, pk):
         try:
             cart_item = CartItem.objects.get(id=pk, user=request.user)
