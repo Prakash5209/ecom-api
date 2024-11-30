@@ -6,7 +6,7 @@ from store.serializers import ProductModelSerializer
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        exclude = ('user',)
+        exclude = ('user','total_cost',)
         #fields = '__all__'
 
 
