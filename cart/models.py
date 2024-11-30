@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 from store.models import CategoryModel,ProductModel
 
@@ -17,6 +18,7 @@ class CartItem(TimeStampModel):
     quantity = models.PositiveIntegerField(default=1)
     color = models.CharField(max_length=255,blank=True,null=True)
     size = models.CharField(max_length=255,blank=True,null=True)
+    total_cost = models.DecimalField(decimal_places=2,blank=True,null=True,max_digits=600000000)
 
     #class Meta:
     #    unique_together = ('product','user',)
@@ -24,12 +26,8 @@ class CartItem(TimeStampModel):
     def __str__(self):
         return f"{self.product} * {self.quantity} in cart"
 
-
-    def total_price(self):
-        return self.product.price * self.quantity
-
-
     def save(self,*args,**kwargs):
+        self.total_cost = self.quantity * self.product.price
         if self.quantity <= 0:
             raise ValueError("quantity must be greater than zero")
         if self.quantity > self.product.stock:

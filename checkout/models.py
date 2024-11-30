@@ -14,6 +14,5 @@ class CheckoutModel(models.Model):
     zip_code = models.CharField(max_length=255)
     cart = models.ForeignKey(CartItem,on_delete = models.CASCADE,related_name="cartitem")
 
-
     def __str__(self):
         return f"{self.cart}"
