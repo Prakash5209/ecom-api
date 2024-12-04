@@ -25,6 +25,7 @@ urlpatterns = [
     path('account/',include('account.urls',namespace='account')),
     path('',include('store.urls',namespace='store')),
     path('cart/',include('cart.urls',namespace='cart')),
+    path('checkout/',include('checkout.urls',namespace="checkout")),
     path('tinymce/', include('tinymce.urls')),
 ]
 
