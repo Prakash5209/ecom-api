@@ -8,6 +8,9 @@ from store.models import CategoryModel,ProductModel,ProductImageModel,ProductCol
 from store.serializers import CategoryModelSerializer,ProductModelSerializer,ProductImageModelSerializer,ProductModelListSerializer,ProductColorModelSerializer,ProductSizeModelSerializer,ProductModelDetailSerializer
 
 
+# test 
+from django.contrib.auth import get_user_model
+
 class CategoryListCreateView(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
     queryset = CategoryModel.objects.all()
     serializer_class = CategoryModelSerializer
@@ -201,6 +204,10 @@ class CategoryProductListView(APIView):
     def get(self,request,*args,**kwargs):
         modl = ProductModel.objects.filter(category__name = kwargs.get('name'))
         seri = ProductModelListSerializer(modl,many=True)
+        print('mero')
+        User = get_user_model()
+        for i in User._meta.get_fields():
+            print(i)
         return Response(seri.data,status = status.HTTP_200_OK)
 
 
