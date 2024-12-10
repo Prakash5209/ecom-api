@@ -30,6 +30,7 @@ class ProductSizeModelSerializer(ModelSerializer):
 
 # extra serializer
 
+# product list with slug
 class ProductModelListSerializer(ModelSerializer):
     class Meta:
         model = ProductModel
@@ -43,4 +44,5 @@ class ProductModelDetailSerializer(ModelSerializer):
     class Meta:
         model = ProductModel
         fields = '__all__'
+
 

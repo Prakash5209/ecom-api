@@ -1,5 +1,6 @@
 from rest_framework import mixins, generics 
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
@@ -221,3 +222,14 @@ class ProductDetailView(mixins.RetrieveModelMixin,generics.GenericAPIView):
         response = self.retrieve(request,*args,**kwargs)
         return self.retrieve(request,*args,**kwargs)
 
+
+# search for product views with product title and product category 
+class ProductSearchView(APIView):
+    def get(self,request,*args,**kwargs):
+        qparm = request.query_params.get('text','')
+        product_modl = ProductModel.objects.filter(Q(title__icontains = qparm) | Q(category__name = qparm))
+        seri = ProductModelListSerializer(product_modl,many=True)
+        if len(product_modl) < 1:
+            return Response(seri.data,status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(seri.data,status=status.HTTP_200_OK)
