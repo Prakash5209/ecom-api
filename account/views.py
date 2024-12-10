@@ -14,6 +14,6 @@ class UserSignup(APIView):
         seri = UserSignupSerializers(data = request.data)
         if seri.is_valid():
             user = seri.save()
-            return Response({'status':'user created'},status=status.HTTP_201_CREATED)
+            return Response(seri.data,status=status.HTTP_201_CREATED)
         else:
             return Response(seri.errors,status=status.HTTP_400_BAD_REQUEST)

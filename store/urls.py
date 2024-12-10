@@ -1,6 +1,6 @@
 from django.urls import path
 
-from store.views import CategoryListCreateView,CategoryRetrieveUpdateDestory,CategoryProductListView,ProductListCreateView,ProductRetrieveUpdateDestory,ProductImageCRUDView,ProductColorListCreateView,ProductColorRUD,ProductSizeListCreateView,ProductSizeRUD,ProductDetailView
+from store.views import CategoryListCreateView,CategoryRetrieveUpdateDestory,CategoryProductListView,ProductListCreateView,ProductRetrieveUpdateDestory,ProductImageCRUDView,ProductColorListCreateView,ProductColorRUD,ProductSizeListCreateView,ProductSizeRUD,ProductDetailView,ProductSearchView
 
 app_name = "store"
 urlpatterns = [
@@ -27,5 +27,8 @@ urlpatterns = [
 
     #product detail view
     path('product-detail/<str:slug>/',ProductDetailView.as_view(),name="productdetailview"),
+
+    #search for product
+    path('p/',ProductSearchView.as_view(),name="productsearchview"),
 
 ]
