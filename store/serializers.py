@@ -32,6 +32,11 @@ class ProductSizeModelSerializer(ModelSerializer):
 
 # product list with slug
 class ProductModelListSerializer(ModelSerializer):
+    category = CategoryModelSerializer()
+    productmodel_image = ProductImageModelSerializer(many=True)
+    product_color = ProductColorModelSerializer(many=True)
+    product_size = ProductSizeModelSerializer(many=True)
+
     class Meta:
         model = ProductModel
         exclude = ('user',)

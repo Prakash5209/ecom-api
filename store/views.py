@@ -232,4 +232,5 @@ class ProductSearchView(APIView):
         if len(product_modl) < 1:
             return Response(seri.data,status=status.HTTP_204_NO_CONTENT)
         else:
+            print(seri.data)
             return Response(seri.data,status=status.HTTP_200_OK)
