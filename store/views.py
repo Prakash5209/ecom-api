@@ -1,8 +1,9 @@
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework import mixins, generics 
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from store.models import CategoryModel,ProductModel,ProductImageModel,ProductColorModel,ProductSizeModel
@@ -168,7 +169,6 @@ class ProductImageCRUDView(APIView):
     def put(self, request, *args, **kwargs):
         try:
             model = get_object_or_404(ProductImageModel, id=kwargs.get('pk'))
-            print(model)
             serializer = ProductImageModelSerializer(model, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
@@ -205,10 +205,6 @@ class CategoryProductListView(APIView):
     def get(self,request,*args,**kwargs):
         modl = ProductModel.objects.filter(category__name = kwargs.get('name'))
         seri = ProductModelListSerializer(modl,many=True)
-        print('mero')
-        User = get_user_model()
-        for i in User._meta.get_fields():
-            print(i)
         return Response(seri.data,status = status.HTTP_200_OK)
 
 
@@ -224,13 +220,21 @@ class ProductDetailView(mixins.RetrieveModelMixin,generics.GenericAPIView):
 
 
 # search for product views with product title and product category 
+@permission_classes([AllowAny])
 class ProductSearchView(APIView):
     def get(self,request,*args,**kwargs):
         qparm = request.query_params.get('text','')
-        product_modl = ProductModel.objects.filter(Q(title__icontains = qparm) | Q(category__name = qparm))
+        min_price = request.query_params.get('minp','')
+        print(min_price)
+        max_price = request.query_params.get('maxp','')
+        print(max_price)
+        queryParm = Q(title__icontains = qparm) | Q(category__name = qparm)
+        #product_modl = ProductModel.objects.filter((Q(title__icontains = qparm) | Q(category__name = qparm)) & (Q(price__gte = None) & Q(price__lte = None)))
+        if min_price and max_price:
+            queryParm &= Q(price__gte = min_price) & Q(price__lte = max_price)
+        product_modl = ProductModel.objects.filter(queryParm)
         seri = ProductModelListSerializer(product_modl,many=True)
         if len(product_modl) < 1:
-            return Response(seri.data,status=status.HTTP_204_NO_CONTENT)
+            return Response({'status':'error'},status=status.HTTP_204_NO_CONTENT)
         else:
-            print(seri.data)
             return Response(seri.data,status=status.HTTP_200_OK)

@@ -59,7 +59,7 @@ class ProductImageModel(models.Model):
     image = models.ImageField(upload_to="product_image")
 
     def __str__(self):
-        return f"{self.productcolorandsizemodel.productmodel.title}-{self.image}"
+        return f"{self.productmodel.title}-{self.image}"
 
 
 
