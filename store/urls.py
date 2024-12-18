@@ -19,7 +19,6 @@ urlpatterns = [
     path('size/',ProductSizeListCreateView.as_view(),name="productsizelistcreateview"),
     path('sizerud/<int:pk>/',ProductSizeRUD.as_view(),name="productsizerud"),
 
-
     path('image/<int:pk>/',ProductImageCRUDView.as_view(),name="productimageRview"),
     path('create-image/',ProductImageCRUDView.as_view(),name="productimageCview"),
     path('update-image/<int:pk>/',ProductImageCRUDView.as_view(),name="productimageUview"),

@@ -10,7 +10,8 @@ class CategoryModelSerializer(ModelSerializer):
 class ProductModelSerializer(ModelSerializer):
     class Meta:
         model = ProductModel
-        exclude = ('user','slug',)
+        #exclude = ()
+        fields = "__all__"
 
 class ProductImageModelSerializer(ModelSerializer):
     class Meta:

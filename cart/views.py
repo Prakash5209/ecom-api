@@ -10,8 +10,9 @@ from django.db.models import Prefetch,Q
 
 #from store.serializers import ProductSerializer,ProductRetrieveSerializer
 from store.models import ProductModel
+from store.serializers import ProductModelDetailSerializer
 from cart.models import CartItem
-from cart.serializers import CartItemSerializer,CartItemRetrieveSerializer,CartListSerializer
+from cart.serializers import CartItemSerializer,CartListSerializer
 #from store import serializers
 
 #exist_or_not = CartItem.objects.filter(user = self.request.user,product = serializer.validated_data['product'],quantity = serializer.validated_data['quantity'],color = serializer.validated_data['color'],size = serializer.validated_data['size']).exists()
@@ -21,6 +22,15 @@ class CartListView(ListAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
+        for i in CartItem.objects.filter(user = self.request.user):
+            print('user',i.user)
+            print('product',i.product)
+            print('quantity',i.quantity)
+            print('color',i.color)
+            print('size',i.size)
+            print('total_cost',i.total_cost)
+            print()
+        print()
         return CartItem.objects.filter(user = self.request.user)
 
 class CartItemCreateView(CreateAPIView):
@@ -49,7 +59,11 @@ class CartItemCreateView(CreateAPIView):
         except CartItem.DoesNotExist:
             if cart_quantity+request.data.get('quantity')<= pstock:
                 self.perform_create(serializer)
-                return response.Response(serializer.data,status = status.HTTP_201_CREATED)
+                print('serializer.data.id',serializer.data.get('id'))
+                cart_item_modl = CartItem.objects.get(id = serializer.data.get('id'))
+                cart_item_model_serializer = CartListSerializer(cart_item_modl)
+                print('cart_item_model_serializer',cart_item_model_serializer.data)
+                return response.Response(cart_item_model_serializer.data,status = status.HTTP_201_CREATED)
             else:
                 return response.Response({'status':'cart quantity is full'},status = status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -79,8 +93,8 @@ class CartItemCreateView(CreateAPIView):
     #            self.perform_create(serializer)
     #            return response.Response(serializer.data,status = status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-            serializer.save(user = self.request.user)
+    #def perform_create(self, serializer):
+    #        serializer.save(user = self.request.user)
 
 
 class CartItemRUD(RetrieveUpdateDestroyAPIView):

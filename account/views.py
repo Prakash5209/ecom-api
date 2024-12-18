@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 from account.serializers import UserSignupSerializers
 
-User = get_user_model()
+class ProfileInfo(APIView):
+    pass
 
 class UserSignup(APIView):
     def post(self,request,*args,**kwargs):
