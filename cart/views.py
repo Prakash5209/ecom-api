@@ -59,42 +59,14 @@ class CartItemCreateView(CreateAPIView):
         except CartItem.DoesNotExist:
             if cart_quantity+request.data.get('quantity')<= pstock:
                 self.perform_create(serializer)
-                print('serializer.data.id',serializer.data.get('id'))
-                cart_item_modl = CartItem.objects.get(id = serializer.data.get('id'))
-                cart_item_model_serializer = CartListSerializer(cart_item_modl)
-                print('cart_item_model_serializer',cart_item_model_serializer.data)
+                cart_item_modl = CartItem.objects.get(id = serializer.data.get('id')) # getting cartitem 
+                cart_item_model_serializer = CartListSerializer(cart_item_modl) # serializing cartitem 
                 return response.Response(cart_item_model_serializer.data,status = status.HTTP_201_CREATED)
             else:
                 return response.Response({'status':'cart quantity is full'},status = status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def perform_create(self, serializer):
         serializer.save(user = self.request.user)
-
-
-    #def create(self,request,*args,**kwargs):
-    #    serializer = self.get_serializer(data = request.data)
-    #    serializer.is_valid(raise_exception = True)
-
-    #    pid = serializer.validated_data.get('product').id
-    #    pstock = serializer.validated_data.get('product').stock
-    #    cart_quantity = sum([i.quantity for i in CartItem.objects.filter(product__id = pid)])
-    #    print('cart_quantity',cart_quantity)
-    #    if cart_quantity >= pstock:
-    #        print(cart_quantity)
-    #        print(pstock)
-    #        raise ValueError("CartItemCreateView: quantity is greater than stock cannot save")
-    #    else:
-    #        try:
-    #            exist_or_not = CartItem.objects.get(user = self.request.user,product = serializer.validated_data['product'],color = serializer.validated_data['color'],size = serializer.validated_data['size'])
-    #            exist_or_not.quantity += serializer.validated_data['quantity']
-    #            exist_or_not.save()
-    #            return response.Response(serializer.data,status = status.HTTP_200_OK)
-    #        except CartItem.DoesNotExist:
-    #            self.perform_create(serializer)
-    #            return response.Response(serializer.data,status = status.HTTP_201_CREATED)
-
-    #def perform_create(self, serializer):
-    #        serializer.save(user = self.request.user)
 
 
 class CartItemRUD(RetrieveUpdateDestroyAPIView):

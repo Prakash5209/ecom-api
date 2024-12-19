@@ -10,7 +10,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         exclude = ('user','total_cost',)
         #fields = '__all__'
 
-# this serializer for cart list with necessary details only
+# serializer for cart list with necessary details only
 class CartListSerializer(serializers.ModelSerializer):
     product = ProductModelSerializer(read_only=True)
     productmodel_image = serializers.SerializerMethodField()
