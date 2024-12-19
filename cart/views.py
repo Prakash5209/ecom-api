@@ -8,29 +8,17 @@ from django.views import View
 from django.http import JsonResponse
 from django.db.models import Prefetch,Q
 
-#from store.serializers import ProductSerializer,ProductRetrieveSerializer
 from store.models import ProductModel
 from store.serializers import ProductModelDetailSerializer
 from cart.models import CartItem
 from cart.serializers import CartItemSerializer,CartListSerializer
-#from store import serializers
 
-#exist_or_not = CartItem.objects.filter(user = self.request.user,product = serializer.validated_data['product'],quantity = serializer.validated_data['quantity'],color = serializer.validated_data['color'],size = serializer.validated_data['size']).exists()
 
 class CartListView(ListAPIView):
     serializer_class = CartListSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        for i in CartItem.objects.filter(user = self.request.user):
-            print('user',i.user)
-            print('product',i.product)
-            print('quantity',i.quantity)
-            print('color',i.color)
-            print('size',i.size)
-            print('total_cost',i.total_cost)
-            print()
-        print()
         return CartItem.objects.filter(user = self.request.user)
 
 class CartItemCreateView(CreateAPIView):
@@ -53,7 +41,13 @@ class CartItemCreateView(CreateAPIView):
             if cart_quantity < pstock:
                 exist_or_not.quantity += serializer.validated_data['quantity']
                 exist_or_not.save()
-                return response.Response(serializer.data,status = status.HTTP_200_OK)
+                print('exist_or_not',exist_or_not.id)
+                #return response.Response(serializer.data,status = status.HTTP_200_OK)
+
+                cart_item_modl = CartItem.objects.get(id = exist_or_not.id) # getting cartitem 
+                cart_item_model_serializer = CartListSerializer(cart_item_modl) # serializing cartitem 
+                return response.Response(cart_item_model_serializer.data,status = status.HTTP_201_CREATED)
+
             else:
                 return response.Response({'status':'cart quantity is greater than pstock'},status = status.HTTP_400_BAD_REQUEST)
         except CartItem.DoesNotExist:
