@@ -29,8 +29,8 @@ class KhaltiPaymentInitiateView(APIView):
             'Content-Type':'application/json',
         }
         try:
-            print('request data', request.data)
             response = requests.post(khalti_url, headers=headers, data=json.dumps(request.data))
+            print('response data',response.data)
             print('response status',response.status_code)
             print('response text',response.text)
             return Response(response.json(),status = response.status_code)

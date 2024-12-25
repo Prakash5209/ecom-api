@@ -5,10 +5,12 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-from account.views import UserSignup
+from account.views import UserSignup,ProfileInfo
 
 app_name = "account"
 urlpatterns = [
+    path('userInfo/',ProfileInfo.as_view(),name="profileinfo"),
+
     path('api/create-user/',UserSignup.as_view(),name="usersignup"),
 
     # simple_jwt
